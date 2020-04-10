@@ -1,43 +1,37 @@
 
 public class Potok {
-	int Id;
-	private int maxTime;//максимальное время выполнения потока
-	int needTime;//время, которое надо для выполнения 
-	boolean Done = false;//метка выполнен ли данный поток
-	String discription="Поток ";
+	private int currentTime = 0;//текужее время выполнения потока
+	private int maxTime;
+	private String discription="Поток ";
 	
-	public Potok(int id, int maxTime) {
-		this.Id = id;
-		this.discription+=id+"";
-		this.maxTime =maxTime;		
+	public Potok (int number, int quant) {
+		this.discription+=number;
+		this.maxTime=quant;
 	}
-	public void DoIt() {
-		System.out.println(discription + " выполнен ");
-		Done = true;
-	}
-	public boolean MaybeWork(int Time) {
-		System.out.println(" Затраченное время выполнения:" +needTime + ", " + " Максимальное время выполнения: " + Time + " Возможное время на выполнение:" + maxTime );
-		if(needTime <= Time) {
-			return true;
+	
+	public void implementPotok() {
+		System.out.println(discription+ ", с максимальным временем "+maxTime + " выполняется");
+		while (maxTime > currentTime)
+		{
+			currentTime++;
+			//ока есть время на выполнение
+			System.out.println(discription+" с временем выполнения: "+currentTime);
+			maxTime--;
+			if (maxTime==0) {
+				System.out.println("Квант на " + discription + " истек");
+				break;
+			}
 		}
-		return false;
+		//если нет время на выполнение потока, то завершается
+			System.out.println(discription + " завершен");
 	}
-	public boolean Status() {	
-		return Done;
+	public String getDiscription()
+	{
+		return discription;
 	}
-	public String PrintInfo() {
-		return discription + " " + maxTime;
-	}
-	public String EndWithError() {
-		Done = true;
-		return discription + "  закончен с ошибкой";
-	}
-	public boolean ErrorTime(int time) {
-		if(time < needTime) {
-			Done = true;
-			System.out.println(discription + " недостаточно основного времени");
-			return true;
-		}
-		return false;
+	// есть ли еще время на выполнение
+	public boolean needTime() 
+	{
+		return (maxTime > currentTime);
 	}
 }
