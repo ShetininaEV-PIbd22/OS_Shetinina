@@ -2,56 +2,29 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Process {
-	private int Id; //номер процесса
-	private int currentTime=0; //время на выполнение
-	private ArrayList<Potok> potoks;//список потоков
-	private int maxTime;//максимальное время на исполнение процесса
-	private String discription="Процесс ";
-	private Random rand = new Random();
-	
-	public Process(int id,int Time) {
-		this.maxTime = Time;
-		this.Id=id;
-		this.discription+=id+" ";
+	private String discription ="Процесс ";
+	private ArrayList<Potok> potoks;
+	private Random rand= new Random();
+
+	public Process(int number, int quant) {
+		potoks= new ArrayList<Potok>();
+		int countPotok=rand.nextInt(4)+1;
+		this.discription += number+", с числом потоков "+countPotok;
+		System.out.println(discription);
 		
-		potoks = new ArrayList<Potok>();
-		for (int i = 0; i < rand.nextInt(4)+1; i++) {
-			potoks.add(new Potok((i+1),rand.nextInt(9)+1));
+		for (int i=0; i<countPotok; i++) {
+			Potok potok= new Potok((i+1), (quant/countPotok));
+			potoks.add(potok);
 		}
 	}
-	public void Start() {
-		System.out.println(discription + " начат.");
-		for (int i = 0; i < potoks.size(); i++) {
-			if(potoks.get(i).Status()) {
-				currentTime++;
-				continue;
-			}
-			if(potoks.get(i).MaybeWork(maxTime - currentTime)) {
-				potoks.get(i).DoIt();
-			}
-			if(!potoks.get(i).ErrorTime(maxTime)) {
-				continue;
-			}
-			//else {
-				//continue;
-			//}
-		}
+	public ArrayList<Potok> getPotoks(){
+		return potoks;
 	}
-	public boolean ProcessDone() {
-		for (int i=0; i<potoks.size(); i++){
-			if(!potoks.get(i).Status()) {
-				return false;
-			}
-		}
-		return true;
+	public String getDiscription() {
+		return discription;
 	}
-	public int getId() {
-		return Id;
-	}
-	public void printProcess() {
-		System.out.println(discription + ": Потоков: " + potoks.size());
-		for (int i=0; i<potoks.size(); i++){
-			System.out.println("\t" + potoks.get(i).PrintInfo());
-		}
+	public boolean isEmpty() 
+	{
+		return (potoks.size() > 0);
 	}
 }
