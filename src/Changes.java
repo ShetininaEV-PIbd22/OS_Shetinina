@@ -20,7 +20,7 @@ public class Changes extends JPanel{
 	public static boolean addFile(String name, int size) {
 		if (files != null) {
 			for (int i = 0; i < files.size(); i++) {
-				if (files.get(i).getNode().getName().equals(name)) {
+				if (files.get(i).getUzel().getName().equals(name)) {
 					JOptionPane.showMessageDialog(null, "Такой файл уже есть.");
 					return false;
 				}
@@ -32,13 +32,13 @@ public class Changes extends JPanel{
 		}
 		countFree -= size / 4;
 		countElement = size / 4;
-		Place[] ps = new Place[countElement];
+		Mesto[] ps = new Mesto[countElement];
 		int ps_id = 0;
 		for (int i = 0; i < memory.length && countElement > 0; i++) {
 			if (memory[i] == 1) {
 				countElement--;
 				memory[i] = 2;
-				ps[ps_id++] = new Place(i);
+				ps[ps_id++] = new Mesto(i);
 			}
 		}
 
@@ -50,32 +50,32 @@ public class Changes extends JPanel{
 			sizeLocal = size;
 			size = 0;
 		}
-		IndexUzel knot = new IndexUzel(ps,name, sizeLocal);
-		uzel.indexNode(ps);
+		IndexUzel uzel = new IndexUzel(ps,name, sizeLocal);
+		uzel.indexUzel(ps);
 		while (size > 0) {
 			if(size / 4 > 3) {
 				sizeLocal = 3*4;
 				size -=sizeLocal;
-				knot.setNode(ps,name, sizeLocal);
+				uzel.setNode(ps,name, sizeLocal);
 			} else {
 				sizeLocal = size;
 				size = 0;
-				knot.setNode(ps,name, sizeLocal);
+				uzel.setNode(ps,name, sizeLocal);
 			}
 		}
-		File file = new File(knot);
+		File file = new File(uzel);
 		files.add(file);
 		return true;
 	}
 
 	public static void Delete(String s) {
-		Place[] ps = getfile(s).getNode().getpositions();
+		Mesto[] ps = getfile(s).getUzel().getPositions();
 		if (ps != null) {
 			for (int i = 0; i < ps.length; i++) {
 				memory[ps[i].I] = 1;
 			}
 		}
-		countFree += getfile(s).getNode().fileSize() / 2;
+		countFree += getfile(s).getUzel().fileSize() / 2;
 		files.remove(getfile(s));
 	}
 
